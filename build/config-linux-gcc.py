@@ -22,9 +22,9 @@ BOOSTLIB       = ['boost_system', 'boost_filesystem', 'boost_thread']
 COLLADAINCLUDE = ['/usr/include/collada-dom2.4', '/usr/include/collada-dom2.4/1.4']
 COLLADALIB     = ['collada-dom2.4-dp']
 FFTWLIB        = ['fftw3_threads', 'fftw3']
-EMCAINCLUDE    = ['/usr/local/include']
-EMCALIBDIR     = ['/usr/local/lib']
-EMCALIB        = ['emca', 'atomic']
+# EMCAINCLUDE    = ['/usr/local/include']
+# EMCALIBDIR     = ['/usr/local/lib']
+# EMCALIB        = ['emca', 'atomic']
 
 # The following runs a helper script to search for installed Python
 # packages that have a Boost Python library of matching version.
