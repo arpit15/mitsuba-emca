@@ -11,7 +11,7 @@ if renderEnv.has_key('XERCESLIB'):
 if renderEnv.has_key('EMCALIB'):
         renderEnv.Prepend(LIBS=renderEnv['EMCALIB'])
 
-librender = renderEnv.SharedLibrary('mitsuba-render', [
+srcs = [
         'bsdf.cpp', 'film.cpp', 'integrator.cpp', 'emitter.cpp', 'sensor.cpp',
         'skdtree.cpp', 'medium.cpp', 'renderjob.cpp', 'imageproc.cpp',
         'rectwu.cpp', 'renderproc.cpp', 'imageblock.cpp', 'particleproc.cpp',
@@ -19,8 +19,14 @@ librender = renderEnv.SharedLibrary('mitsuba-render', [
         'shape.cpp', 'trimesh.cpp', 'sampler.cpp', 'util.cpp', 'irrcache.cpp',
         'testcase.cpp', 'photonmap.cpp', 'gatherproc.cpp', 'volume.cpp',
         'vpl.cpp', 'shader.cpp', 'scenehandler.cpp', 'intersection.cpp',
-        'common.cpp', 'phase.cpp', 'noise.cpp', 'photon.cpp', 'sphericalview.cpp'
-])
+        'common.cpp', 'phase.cpp', 'noise.cpp', 'photon.cpp', 
+        # 'sphericalview.cpp'
+]
+
+if renderEnv.has_key('EMCALIB'):
+        srcs.append("sphericalview.cpp")
+
+librender = renderEnv.SharedLibrary('mitsuba-render', srcs)
 
 if sys.platform == "darwin":
         renderEnv.AddPostAction(librender, 'install_name_tool -id @rpath/libmitsuba-render.dylib $TARGET')
