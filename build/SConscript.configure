@@ -126,12 +126,12 @@ if 'OEXRLIBDIR' in env:
         env.Prepend(LIBPATH=env['OEXRLIBDIR'])
 if 'EIGENINCLUDE' in env:
         env.Prepend(CPPPATH=env['EIGENINCLUDE'])
-if 'EMCAINCLUDE' in env:
-        env.Prepend(CPPPATH=env['EMCAINCLUDE'])
-if 'EMCALIBDIR' in env:
-        env.Prepend(LIBPATH=env['EMCALIBDIR'])
-if 'EMCALIB' in env:
-        env.Prepend(LIBS=env['EMCALIB'])
+# if 'EMCAINCLUDE' in env:
+#         env.Prepend(CPPPATH=env['EMCAINCLUDE'])
+# if 'EMCALIBDIR' in env:
+#         env.Prepend(LIBPATH=env['EMCALIBDIR'])
+# if 'EMCALIB' in env:
+#         env.Prepend(LIBS=env['EMCALIB'])
 
 env.Decider('MD5-timestamp')
 
