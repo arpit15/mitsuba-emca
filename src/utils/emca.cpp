@@ -70,7 +70,12 @@ void signalHandler(int signal) {
 class MitsubaEMCAInterface final : public emca::RenderInterface {
 public:
     MitsubaEMCAInterface(int argc, char **argv) : emca::RenderInterface() {
-        int retval = mitsuba_init(argc, argv);
+        // int retval = mitsuba_init(argc, argv);
+        int retval = 0;
+        if(argc>1){
+            scene_fn = argv[1];
+            retval = mitsuba_init(argv[1]);
+        }
         m_preprocessed = false;
         SLog(EInfo, "Retval from init: %d", retval);
         if(retval < 0) {
@@ -298,8 +303,20 @@ public:
 
     fs::path getDestinationFile() { return m_scene->getDestinationFile(); }
 
+    void reload() {
+        std::cout << "Need a scene.xml file ..." << std::endl;
+        if(!scene_fn.empty()){
+            int retval = mitsuba_init(scene_fn);
+            // update shape mapping
+            DataApiMitsuba *dataApiMitsuba = DataApiMitsuba::getInstance();
+            dataApiMitsuba->configureShapeMapping(getScene()->getShapes());
+        } else {
+            std::cout << "Need a scene.xml file ..." << std::endl;
+        }
+    }
 private:
-    int mitsuba_init(int argc, char **argv) {
+    // int mitsuba_init(int argc, char **argv) {
+    int mitsuba_init(const std::string &fname) {
         try {
             /* Default settings */
             std::string nodeName = getHostName(),
@@ -337,13 +354,13 @@ private:
             parser->setErrorHandler(handler.get());
             const int i = 1;
             fs::path
-                    filename = fileResolver->resolve(argv[i]),
+                    filename = fileResolver->resolve(fname),
                     filePath = fs::absolute(filename).parent_path(),
                     baseName = filename.stem();
             ref<FileResolver> frClone = fileResolver->clone();
             frClone->prependPath(filePath);
             Thread::getThread()->setFileResolver(frClone);
-            SLog(EInfo, "Parsing scene description from \"%s\" ..", argv[i]);
+            SLog(EInfo, "Parsing scene description from \"%s\" ..", fname);
             parser->parse(filename.c_str());
             m_scene = handler->getScene();
             m_scene->setSourceFile(filename);
@@ -383,6 +400,8 @@ private:
     ref<RenderJob> m_renderJob;
 
     bool m_preprocessed {false};
+
+    std::string scene_fn;
 };
 
 class EMCAServer : public Utility {
